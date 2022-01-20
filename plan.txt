@@ -1,0 +1,25 @@
+Random Choice: List[int]
+    Sample a range of [0, 9] for 4 unique numbers
+    Return these in a list
+
+User Input: str -> Optional[str] -> Option[List[int]]
+str -> Optional[str]:
+    Strip whitespace from ends of input
+    If input is "exit", output None
+    If input as set length not 4, Retry
+    Output input
+
+Optional[str] -> Optional[List[int]]:
+    If input is None, output None
+    If input contains non-numerical characters, Retry
+    Output a list of the digits as ints
+
+On None return, exit
+On List[int] return, compare lists
+
+Comparing List (List[int], List[int]) -> Tuple[int, int]:
+Return format: Tuple[int, int] = (cows, bulls)
+    If the lists are identical, return [0, 4]
+    Set bulls to the sum of the List[bool] defined as x == b[i] for (x, i) in enumerate(a)
+    Set cows to the length of the intersection between set(a) and set(b) minus the number of bulls
+    return (cows, bulls)
