@@ -1,48 +1,51 @@
-from typing import List, Optional, Tuple
+from typing import List, Optional, Set, Tuple
 from random import sample
 
-digits = [str(x) for x in range(10)]
+digits: Set[str] = {str(x) for x in range(10)}
 
 def genRandom() -> List[int]:
     return sample(range(10), 4)
 
 def getChoice() -> Optional[List[int]]:
     while True:
-        guess = input("Guess: ").strip()
+        guess: str = input("Guess: ").strip()
 
         if guess == "exit":
             return None
 
-        sGuess = set(guess)
+        sGuess: Set[int] = set(guess)
 
-        if len(sGuess) != 4 or len(sGuess.difference(digits)) != 0:
+        # Verify guess is of length and only consists of digits 
+        if len(guess) != 4 or len(sGuess) != 4 or len(sGuess.difference(digits)) != 0:
             print("Guess must be 4 unique digits")
             continue
 
         return [int(c) for c in guess]
 
 def cmpLists(a: List[int], b: List[int]) -> Tuple[int, int]: # (cows, bulls)
-    if a is b: return (0, 4)
-    bulls = sum([v == b[i] for (i, v) in enumerate(a)])
-    cows = len(set(a).intersection(b)) - bulls
+    if a is b: return (0, 4) # Perfect guess
+    bulls: List[int] = sum([v == b[i] for (i, v) in enumerate(a)]) # Find and count matching values
+    cows: List[int] = len(set(a).intersection(b)) - bulls # Numbers in both sets - Numbers in correct place
     return (cows, bulls)
 
 def main() -> None:
-    iGuess, count = genRandom(), 0 # Internal Guess, Guess count
+    count: int = 0 # Initialise guess count
+    iGuess: List[int] = genRandom() # Internal Guess
 
     while True:
-        uGuess, count = getChoice(), count + 1 # User Guess, Increase count
+        count += 1
+        uGuess: List[int] = getChoice() # User Guess
 
         if not uGuess:
             print(''.join(iGuess))
             return
 
-        details = cmpLists(iGuess, uGuess) # (cows, bulls)
-
-        print(f"{details[0]} cows and {details[1]} bulls.")
+        details: Tuple[int, int] = cmpLists(iGuess, uGuess) # (cows, bulls)
 
         if details == (0, 4):
             print(f"Well Done! You guessed correctly in {count} guesses!")
             return
 
-main()
+        print(f"{details[0]} cows and {details[1]} bulls.")
+
+if __name__ == "__main__": main()
